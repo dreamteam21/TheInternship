@@ -1,4 +1,7 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -34,12 +37,30 @@ public class ExtractData {
         	if(matcherImg.find()) {
         		if(matcherDesc.find()) {
         			//System.out.println(matcherImg.group(2)+" "+matcherDesc.group(2).length());
-        			companyList.put(matcherDesc.group(2).length(), matcherImg.group(2));
+        			int i = 0;
+        			while(companyList.containsKey(matcherDesc.group(2).length()+i)) i++;
+        			companyList.put(matcherDesc.group(2).length()+i, matcherImg.group(2));
         		}
         	}
         }
         for(Integer i : companyList.keySet()) {
         	System.out.println(companyList.get(i));
         }
+        jsonApiCompanies(companyList);
     }
+	
+	private static void jsonApiCompanies(TreeMap<Integer, String> cList) throws IOException {
+		File file = new File("companies.json");
+		BufferedWriter jWrite = new BufferedWriter(new FileWriter(file));
+		jWrite.write("{ \"companies\" : [\n");
+		for(Integer i : cList.keySet()) {
+			if(i != cList.lastKey()) {
+				jWrite.write("\t{ \"logo\": \"https://theinternship.io/"+cList.get(i)+"\"},\n");
+			}
+			else {
+				jWrite.write("\t{ \"logo\": \"https://theinternship.io/"+cList.get(i)+"\"}\n] }");
+			}
+		}
+		jWrite.close();
+	}
 }
