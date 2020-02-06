@@ -28,8 +28,13 @@ public class FloatingPrime {
 				}
 				else checked = false;
 			}
-			if(checked) System.out.println("TRUE");
-			else System.out.println("FALSE");
+			if(f < 1.0 || f > 10.0) {
+				System.out.println("INPUT BETWEEN 1.0 and 10.0 ONLY!");
+			}
+			else {
+				if(checked) System.out.println("TRUE");
+				else System.out.println("FALSE");
+			}
 		}
 	}
 }
